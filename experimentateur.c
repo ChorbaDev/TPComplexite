@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include "experimentateur.h"
 // Fonction pour echanger deux entiers
 void echange(int *a, int *b) {
     int temp = *a;
@@ -17,16 +17,6 @@ void affiche(int *t, int n) {
         printf("%d ", t[i]);
     printf("\n");
 }
-
-// Structure representant une experience
-// Un marqueur est un entier compris entre 0 et m
-typedef struct {
-    int m; // Nombre de marqueurs
-    int *marqueurs; // Tous les marqueurs
-
-    int p; // Nombre de marqueurs positifs
-    int *marqueurs_positifs; // Les marqueurs positifs
-} EXPERIENCE;
 
 // Fonction qui cree une expérience et la stocke dans la structure passee en parametre
 // Attention : il faut que p <= m
