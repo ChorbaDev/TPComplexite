@@ -202,18 +202,3 @@ void test(int p, int m) {
 
     libere_experience(&xp);
 }
-
-int main(int argc, const char *argv[]) {
-    int m, p;
-
-    srand((unsigned int) time(NULL));
-
-    printf("Entrez le nombre de marqueurs positifs : ");
-    scanf("%d", &p);
-    printf("Entrez le nombre de marqueurs : ");
-    scanf("%d", &m);
-
-    test(p, m);
-
-    return 0;
-}
