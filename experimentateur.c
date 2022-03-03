@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "experimentateur.h"
+#include <stdbool.h>
 
 int rechercheDicho(int *pInt, int p, int i, int *pInt1);
 
@@ -143,28 +144,8 @@ int *marqueurs_negatifs2(EXPERIENCE *xp, int *cptOP) {
     *cptOP = 0;
 
     int *res = (int *) malloc((xp->m - xp->p) * sizeof(int));
-    int j=-1;
-    for (int i = 0; i < xp->m; i++) {
-        int trouver=rechercheDicho(xp->marqueurs_positifs,xp->p,xp->marqueurs[i],cptOP);
-        if(trouver==-1){
-            j++;
-            res[j]=xp->marqueurs[i];
-        }
-    }
-    return res;
-}
 
-int rechercheDicho(int *t, int n, int elt, int *op) {
-    int bas=1,haut=n-1,milieu;
-    int rang=-1;
-    do{
-        *op=*op+1;
-        milieu=(bas+haut)/2;
-        if (elt==t[milieu]) rang=milieu;
-        else if (t[milieu]<elt) bas=milieu+1;
-        else haut=milieu-1;
-    }while ((elt!=t[milieu]) && (bas<=haut));
-    return rang;
+    return res;
 }
 
 // Fonction a completer - Strategie 3
@@ -189,14 +170,6 @@ void test(int p, int m) {
     printf("\nMarqueurs positfis :\n");
     affiche(xp.marqueurs_positifs, p);
 
-    // Test strategie 2
-    printf("\nStrategie 2\n");
-    marqueurs_negatifs = marqueurs_negatifs2(&xp, &cpt);
-    printf("Marqueurs negatifs :\n");
-    affiche(marqueurs_negatifs, xp.m - xp.p);
-    printf("Strategie 2 / nombres OP : %d\n\n", cpt);
-    free(marqueurs_negatifs);
-    /*
     // Test strategie 1
     printf("\nStrategie 1\n");
     marqueurs_negatifs = marqueurs_negatifs1(&xp, &cpt);
@@ -205,7 +178,13 @@ void test(int p, int m) {
     printf("Strategie 1 / nombres OP : %d\n\n", cpt);
     free(marqueurs_negatifs);
 
-
+    // Test strategie 2
+    printf("\nStrategie 2\n");
+    marqueurs_negatifs = marqueurs_negatifs2(&xp, &cpt);
+    printf("Marqueurs negatifs :\n");
+    affiche(marqueurs_negatifs, xp.m - xp.p);
+    printf("Strategie 2 / nombres OP : %d\n\n", cpt);
+    free(marqueurs_negatifs);
 
     // Test strategie 3
     printf("\nStrategie 3\n");
@@ -214,6 +193,6 @@ void test(int p, int m) {
     affiche(marqueurs_negatifs, xp.m - xp.p);
     printf("Strategie 1 / nombres OP : %d\n\n", cpt);
     free(marqueurs_negatifs);
-*/
+
     libere_experience(&xp);
 }
