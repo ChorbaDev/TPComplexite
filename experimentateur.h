@@ -34,6 +34,7 @@ int *marqueurs_negatifs1(EXPERIENCE *xp, int *cptOP);
 // Fonction a completer - Strategie 2
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs2(EXPERIENCE *xp, int *cptOP);
+int rechercheDicho(int *t, int n, int elt, int *op);
 // Fonction a completer - Strategie 3
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs3(EXPERIENCE *xp, int *cptOP);
