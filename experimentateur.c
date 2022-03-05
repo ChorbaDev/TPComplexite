@@ -131,15 +131,36 @@ void libere_experience(EXPERIENCE *xp) {
 }
 
 // Fonction a completer - Strategie 1
-// Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
+// Le second argument servira a compter le nombre d'utilisation de l'opéruateur OP
 int *marqueurs_negatifs1(EXPERIENCE *xp, int *cptOP) {
     *cptOP = 0;
+    int i;
+    int j = 0;
 
     int *res = (int *) malloc((xp->m - xp->p) * sizeof(int));
 
+    for(i = 0; i<xp->m;i++){
+        int found=rechSeq(xp->marqueurs_positifs,xp->p,xp->marqueurs[i],cptOP);
+//        printf("%d", found);
+        if(!found){
+//            printf("hello");
+            res[j]=i;
+            j++;
+        }
+    }
+
     return res;
 }
-
+int rechSeq(int *mp, int p, int mRech, int *op){
+    int i;
+    for(i=0; i<p;i++){
+        *op=*op+1;
+        if(mp[i]==mRech){
+            return true;
+        }
+    }
+    return false;
+}
 // Fonction a completer - Strategie 2
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs2(EXPERIENCE *xp, int *cptOP) {
