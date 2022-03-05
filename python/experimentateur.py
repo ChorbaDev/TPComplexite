@@ -109,8 +109,20 @@ def marqueurs_negatifs1(xp: Experience, cpt_op: int) -> [list, int]:
     :return:
     """
     cpt_op = 0
-    res = [i for i in range(0, xp.m - xp.p)]
+    res = []
+    for i in range(0, xp.m):
+        found, cpt_op = rech_seq(xp, xp.marqueurs[i], cpt_op)
+        if not found:
+            res.append(xp.marqueurs[i])
     return res, cpt_op
+
+
+def rech_seq(xp, marqueur_rech, op):
+    for i in range(0, xp.p):
+        op += 1
+        if xp.marqueurs_positifs[i] == marqueur_rech:
+            return True, op
+    return False, op
 
 
 def marqueurs_negatifs2(xp: Experience, cpt_op: int) -> [list, int]:

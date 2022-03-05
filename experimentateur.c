@@ -144,7 +144,7 @@ int *marqueurs_negatifs1(EXPERIENCE *xp, int *cptOP) {
 //        printf("%d", found);
         if(!found){
 //            printf("hello");
-            res[j]=i;
+            res[j]=xp->marqueurs[i];
             j++;
         }
     }
