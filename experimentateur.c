@@ -6,6 +6,8 @@
 
 int rechercheDicho(int *pInt, int p, int i, int *pInt1);
 
+int position(int *pInt, int m, int i);
+
 // Fonction pour echanger deux entiers
 void echange(int *a, int *b) {
     int temp = *a;
@@ -142,20 +144,70 @@ int *marqueurs_negatifs1(EXPERIENCE *xp, int *cptOP) {
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs2(EXPERIENCE *xp, int *cptOP) {
     *cptOP = 0;
-
-    int *res = (int *) malloc((xp->m - xp->p) * sizeof(int));
-
+    int nn=(xp->m - xp->p);
+    int *res = (int *) malloc(nn * sizeof(int));
+    mergeSort(xp->marqueurs_positifs, 0, xp->p-1);
+    int j=-1;
+    for (int i = 0; i < xp->m; i++) {
+        (*cptOP)++;
+        int trouver=rechercheDicho(xp->marqueurs_positifs,xp->p,xp->marqueurs[i],cptOP);
+        if(trouver==-1){
+            j++;
+            res[j]=xp->marqueurs[i];
+        }
+        if (j==nn+1) break;
+    }
     return res;
 }
-
+int rechercheDicho(int *t, int n, int elt, int *op) {
+    int bas=0,haut=n-1,milieu;
+    //printf("->elt = %d \n",elt);
+    do{
+        (*op)++;
+        milieu=(bas+haut)/2;
+        //printf("milieu = %d \n",milieu);
+        if (elt==t[milieu]) return milieu;
+        else if (t[milieu]<elt) bas=milieu+1;
+        else haut=milieu-1;
+    }while (bas<=haut);
+    return -1;
+}
 // Fonction a completer - Strategie 3
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs3(EXPERIENCE *xp, int *cptOP) {
     *cptOP = 0;
-
+    int nn=(xp->m - xp->p);
     int *res = (int *) malloc((xp->m - xp->p) * sizeof(int));
-
+    mergeSort(xp->marqueurs, 0, xp->m-1);
+    mergeSort(xp->marqueurs_positifs, 0, xp->p-1);
+    int debut=0,iDeN=-1;
+    int pos;
+    for (int p = 0; p < xp->p; ++p) {
+        (*cptOP)++;
+        pos=position(xp->marqueurs,xp->m,xp->marqueurs_positifs[p]);
+        for (int i = debut; i < pos; ++i) {
+            (*cptOP)++;
+            iDeN++;
+            res[iDeN]=xp->marqueurs[i];
+        }
+        debut=pos+1;
+        if (iDeN==nn+1) break;
+    }
+    if (pos<xp->m-1){
+        for (int i = pos+1; i <xp->m ; ++i) {
+            (*cptOP)++;
+            iDeN++;
+            res[iDeN]=xp->marqueurs[i];
+        }
+    }
     return res;
+}
+
+int position(int *t, int n, int elt) {
+    for (int j = 0; j < n; ++j) {
+        if (t[j]==elt) return j;
+    }
+    return -1;
 }
 
 void test(int p, int m) {
@@ -170,28 +222,14 @@ void test(int p, int m) {
     printf("\nMarqueurs positfis :\n");
     affiche(xp.marqueurs_positifs, p);
 
-    // Test strategie 1
-    printf("\nStrategie 1\n");
-    marqueurs_negatifs = marqueurs_negatifs1(&xp, &cpt);
-    printf("Marqueurs negatifs :\n");
-    affiche(marqueurs_negatifs, xp.m - xp.p);
-    printf("Strategie 1 / nombres OP : %d\n\n", cpt);
-    free(marqueurs_negatifs);
-
-    // Test strategie 2
-    printf("\nStrategie 2\n");
-    marqueurs_negatifs = marqueurs_negatifs2(&xp, &cpt);
-    printf("Marqueurs negatifs :\n");
-    affiche(marqueurs_negatifs, xp.m - xp.p);
-    printf("Strategie 2 / nombres OP : %d\n\n", cpt);
-    free(marqueurs_negatifs);
-
-    // Test strategie 3
-    printf("\nStrategie 3\n");
+    //marqueurs_negatifs = marqueurs_negatifs1(&xp, &cpt);
+    //marqueurs_negatifs = marqueurs_negatifs2(&xp, &cpt);
     marqueurs_negatifs = marqueurs_negatifs3(&xp, &cpt);
+
+    printf("\nStrategie: \n");
     printf("Marqueurs negatifs :\n");
     affiche(marqueurs_negatifs, xp.m - xp.p);
-    printf("Strategie 1 / nombres OP : %d\n\n", cpt);
+    printf("Strategie / nombres OP : %d\n\n", cpt);
     free(marqueurs_negatifs);
 
     libere_experience(&xp);

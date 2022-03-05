@@ -46,7 +46,8 @@ int rechercheDicho(int *t, int n, int elt, int *op);
 // Fonction a completer - Strategie 3
 // Le second argument servira a compter le nombre d'utilisation de l'opérateur OP
 int *marqueurs_negatifs3(EXPERIENCE *xp, int *cptOP);
-
+//retourne la position d'un element dans un tableau
+int position(int *t, int n, int elt);
 void test(int p, int m);
 
 int rechSeq(int *mp, int p, int mRech, int *op);
