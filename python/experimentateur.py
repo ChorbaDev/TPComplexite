@@ -161,14 +161,14 @@ def rechercher_dico(table: list, n: int, elt: int, op: int):
         op += 1
         milieu = (bas + haut) // 2
         if elt == table[milieu]:
-            return True,op
+            return True, op
         elif table[milieu] < elt:
             bas = milieu + 1
         else:
             haut = milieu - 1
         if not bas <= haut:
             break
-    return False,op
+    return False, op
 
 
 def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
@@ -180,8 +180,34 @@ def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
     :return:
     """
     cpt_op = 0
-    res = [i for i in range(0, xp.m - xp.p)]
+    nn = xp.m - xp.p
+    res = []
+    merge_sort(xp.marqueurs, 0, xp.p - 1)
+    merge_sort(xp.marqueurs_positifs, 0, xp.p - 1)
+    debut, iden, pos = 0, 1, 0
+    for p in range(0, xp.p):
+        cpt_op += 1
+        pos = position(xp.marqueurs, xp.m, xp.marqueurs_positifs[p])
+        for i in range(debut, pos):
+            cpt_op += 1
+            iden += 1
+            res.insert(iden, xp.marqueurs[i])
+        debut = pos + 1
+        if iden == nn + 1:
+            break
+    if pos < xp.m - 1:
+        for i in range(pos + 1, xp.m):
+            cpt_op += 1
+            iden += 1
+            res.insert(iden, xp.marqueurs[i])
     return res, cpt_op
+
+
+def position(table: list, n: int, elt: int):
+    for j in range(0, n):
+        if table[j] == elt:
+            return j
+    return -1
 
 
 def test(p: int, m: int) -> None:
