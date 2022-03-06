@@ -41,6 +41,10 @@ class Experience:
             self.marqueurs_positifs.insert(i, self.marqueurs[tmp[j]])
             tmp[j] = tmp[m - i - 1]
 
+    def free_xp(self):
+        self.marqueurs.clear()
+        self.marqueurs_positifs.clear()
+
 
 def merge(arr: list, left_index: int, middle_index: int, right_index: int) -> None:
     """
@@ -58,9 +62,9 @@ def merge(arr: list, left_index: int, middle_index: int, right_index: int) -> No
     n2 = right_index - middle_index
     left, right = [], []
     for i in range(0, n1):
-        left[i] = arr[left_index + i]
+        left.insert(i, arr[left_index + i])
     for j in range(0, n2):
-        right[j] = arr[middle_index + 1 + j]
+        right.insert(j, arr[middle_index + 1 + j])
 
     i, j, k = 0, 0, left_index
     while i < n1 and j < n2:
@@ -134,8 +138,37 @@ def marqueurs_negatifs2(xp: Experience, cpt_op: int) -> [list, int]:
     :return:
     """
     cpt_op = 0
-    res = [i for i in range(0, xp.m - xp.p)]
+    nn = xp.m - xp.p
+    res = []
+    merge_sort(xp.marqueurs_positifs, 0, xp.p - 1)
+    j = -1
+    for i in range(0, xp.m):
+        trouver, tmpop = rechercher_dico(xp.marqueurs_positifs, xp.p, xp.marqueurs[i], cpt_op)
+        cpt_op = tmpop + 1
+        if not trouver:
+            j += 1
+            res.insert(j, xp.marqueurs[i])
+        if j == nn + 1:
+            break
+
     return res, cpt_op
+
+
+def rechercher_dico(table: list, n: int, elt: int, op: int):
+    bas, haut = 0, n - 1
+    condition = True
+    while condition:
+        op += 1
+        milieu = (bas + haut) // 2
+        if elt == table[milieu]:
+            return True,op
+        elif table[milieu] < elt:
+            bas = milieu + 1
+        else:
+            haut = milieu - 1
+        if not bas <= haut:
+            break
+    return False,op
 
 
 def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
@@ -165,15 +198,18 @@ def test(p: int, m: int) -> None:
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 1 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    marqueurs_negatifs.clear()
 
     print("Stratégie 2\n")
     marqueurs_negatifs, cpt = marqueurs_negatifs2(xp, cpt)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 2 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    marqueurs_negatifs.clear()
 
     print("Stratégie 3\n")
     marqueurs_negatifs, cpt = marqueurs_negatifs3(xp, cpt)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 3 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    marqueurs_negatifs.clear()
