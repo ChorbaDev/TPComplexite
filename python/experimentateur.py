@@ -37,7 +37,7 @@ class Experience:
         self.p = p
         self.marqueurs_positifs = []
         for i in range(0, p):
-            j = random.randint(0, m - i)
+            j = random.randint(0, m - 1 - i)
             self.marqueurs_positifs.insert(i, self.marqueurs[tmp[j]])
             tmp[j] = tmp[m - i - 1]
 
@@ -161,14 +161,14 @@ def rechercher_dico(table: list, n: int, elt: int, op: int):
         op += 1
         milieu = (bas + haut) // 2
         if elt == table[milieu]:
-            return True,op
+            return True, op
         elif table[milieu] < elt:
             bas = milieu + 1
         else:
             haut = milieu - 1
         if not bas <= haut:
             break
-    return False,op
+    return False, op
 
 
 def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
@@ -184,7 +184,7 @@ def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
     return res, cpt_op
 
 
-def test(p: int, m: int) -> None:
+def test(p: int, m: int):
     xp = Experience(m, p)
     cpt = 0
 
@@ -194,22 +194,25 @@ def test(p: int, m: int) -> None:
     affiche(xp.marqueurs_positifs)
 
     print("Stratégie 1\n")
-    marqueurs_negatifs, cpt = marqueurs_negatifs1(xp, cpt)
+    marqueurs_negatifs, cpt1 = marqueurs_negatifs1(xp, cpt)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 1 / Nombres d'opérations : " + str(cpt) + "\n\n")
     marqueurs_negatifs.clear()
 
     print("Stratégie 2\n")
-    marqueurs_negatifs, cpt = marqueurs_negatifs2(xp, cpt)
+    marqueurs_negatifs, cpt2 = marqueurs_negatifs2(xp, cpt)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 2 / Nombres d'opérations : " + str(cpt) + "\n\n")
     marqueurs_negatifs.clear()
 
     print("Stratégie 3\n")
-    marqueurs_negatifs, cpt = marqueurs_negatifs3(xp, cpt)
+    marqueurs_negatifs, cpt3 = marqueurs_negatifs3(xp, cpt)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
     print("Stratégie 3 / Nombres d'opérations : " + str(cpt) + "\n\n")
     marqueurs_negatifs.clear()
+
+    res_list = [m, p, cpt1, cpt2, cpt3]
+    return res_list
