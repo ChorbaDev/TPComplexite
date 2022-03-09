@@ -104,60 +104,55 @@ def merge_sort(arr: list, left_index: int, right_index: int) -> None:
         merge(arr, left_index, m, right_index)
 
 
-def marqueurs_negatifs1(xp: Experience, cpt_op: int) -> [list, int]:
+def marqueurs_negatifs1(xp: Experience) -> [list]:
     """
     Fonction a completer - Stratégie 1
-    Le second argument servira à compter le nombre d'utilisations de l'opérateur OP
     :param xp:
-    :param cpt_op:
     :return:
     """
     cpt_op = 0
     res = []
-    for i in range(0, xp.m):
-        found, cpt_op = rech_seq(xp, xp.marqueurs[i], cpt_op)
+    for elt in xp.marqueurs:
+        found, tmpop = rech_seq(xp.marqueurs_positifs, elt)
+        cpt_op+=tmpop
         if not found:
-            res.append(xp.marqueurs[i])
+            res.append(elt)
     return res, cpt_op
 
 
-def rech_seq(xp, marqueur_rech, op):
-    for i in range(0, xp.p):
+def rech_seq(array, marqueur_rech):
+    op=0
+    for elt in array:
         op += 1
-        if xp.marqueurs_positifs[i] == marqueur_rech:
+        if elt == marqueur_rech:
             return True, op
     return False, op
 
 
-def marqueurs_negatifs2(xp: Experience, cpt_op: int) -> [list, int]:
+def marqueurs_negatifs2(xp: Experience) -> [list]:
     """
     Fonction a completer - Stratégie 2
-    Le second argument servira à compter le nombre d'utilisations de l'opérateur OP
     :param xp:
-    :param cpt_op:
     :return:
     """
-    cpt_op = 0
-    nn = xp.m - xp.p
+    xpn = xp.m - xp.p
     res = []
     merge_sort(xp.marqueurs_positifs, 0, xp.p - 1)
-    j = -1
-    for i in range(0, xp.m):
-        trouver, tmpop = rechercher_dico(xp.marqueurs_positifs, xp.p, xp.marqueurs[i], cpt_op)
-        cpt_op = tmpop + 1
+    cpt_op = 0
+    for elt in xp.marqueurs:
+        trouver, tmpop = rechercher_dico(xp.marqueurs_positifs, xp.p, elt)
+        cpt_op += tmpop
         if not trouver:
-            j += 1
-            res.insert(j, xp.marqueurs[i])
-        if j == nn + 1:
+            res.append(elt)
+        if len(res) == xpn:
             break
 
     return res, cpt_op
 
 
-def rechercher_dico(table: list, n: int, elt: int, op: int):
-    bas, haut = 0, n - 1
-    condition = True
-    while condition:
+def rechercher_dico(table: list, n: int, elt: int):
+    bas, op, haut = 0,0, n - 1
+    while True:
         op += 1
         milieu = (bas + haut) // 2
         if elt == table[milieu]:
@@ -171,48 +166,71 @@ def rechercher_dico(table: list, n: int, elt: int, op: int):
     return False, op
 
 
-def marqueurs_negatifs3(xp: Experience, cpt_op: int) -> [list, int]:
+def marqueurs_negatifs3(xp: Experience) -> [list]:
     """
-    Fonction a completer - Stratégie 1
-    Le second argument servira à compter le nombre d'utilisations de l'opérateur OP
+    Fonction a completer - Stratégie 3
     :param xp:
-    :param cpt_op:
     :return:
     """
-    cpt_op = 0
-    res = [i for i in range(0, xp.m - xp.p)]
+    nn = xp.m - xp.p
+    cpt_op, debut, pos = 0, 0, 0
+    res = []
+    merge_sort(xp.marqueurs, 0, xp.m - 1)
+    merge_sort(xp.marqueurs_positifs, 0, xp.p - 1)
+    for p in xp.marqueurs_positifs:
+        cpt_op += 1
+        pos = position(xp.marqueurs, p)
+        for i in range(debut, pos):
+            cpt_op += 1
+            res.append(xp.marqueurs[i])
+        debut = pos + 1
+        if len(res) == nn:
+            break
+    if len(res) < nn:
+        for i in range(pos + 1, xp.m):
+            cpt_op += 1
+            res.append(xp.marqueurs[i])
+
     return res, cpt_op
+
+
+def position(t, elt):
+    for i in range(len(t)):
+        if t[i] == elt:
+            return i
+    return -1
 
 
 def test(p: int, m: int):
     xp = Experience(m, p)
-    cpt = 0
-
     print("Marqueurs :\n")
     affiche(xp.marqueurs)
     print("Marqueurs positifs :\n")
     affiche(xp.marqueurs_positifs)
 
     print("Stratégie 1\n")
-    marqueurs_negatifs, cpt1 = marqueurs_negatifs1(xp, cpt)
+    marqueurs_negatifs, cpt1 = marqueurs_negatifs1(xp)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
-    print("Stratégie 1 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    print("Stratégie 1 / Nombres d'opérations : ", cpt1, "\n\n")
     marqueurs_negatifs.clear()
 
     print("Stratégie 2\n")
-    marqueurs_negatifs, cpt2 = marqueurs_negatifs2(xp, cpt)
+    marqueurs_negatifs, cpt2 = marqueurs_negatifs2(xp)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
-    print("Stratégie 2 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    print("Stratégie 2 / Nombres d'opérations : ", cpt2, "\n\n")
     marqueurs_negatifs.clear()
 
     print("Stratégie 3\n")
-    marqueurs_negatifs, cpt3 = marqueurs_negatifs3(xp, cpt)
+    marqueurs_negatifs, cpt3 = marqueurs_negatifs3(xp)
     print("Marqueurs négatifs :\n")
     affiche(marqueurs_negatifs)
-    print("Stratégie 3 / Nombres d'opérations : " + str(cpt) + "\n\n")
+    print("Stratégie 3 / Nombres d'opérations : ", cpt3, "\n\n")
     marqueurs_negatifs.clear()
 
     res_list = [m, p, cpt1, cpt2, cpt3]
     return res_list
+
+
+test(2,5)
