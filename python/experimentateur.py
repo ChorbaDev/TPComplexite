@@ -110,17 +110,20 @@ def marqueurs_negatifs1(xp: Experience) -> [list]:
     :return:
     """
     cpt_op = 0
+    nn = xp.m - xp.p
     res = []
     for elt in xp.marqueurs:
         found, tmpop = rech_seq(xp.marqueurs_positifs, elt)
-        cpt_op+=tmpop
+        cpt_op += tmpop
         if not found:
             res.append(elt)
+        if len(res) == nn:
+            break
     return res, cpt_op
 
 
 def rech_seq(array, marqueur_rech):
-    op=0
+    op = 0
     for elt in array:
         op += 1
         if elt == marqueur_rech:
@@ -150,7 +153,7 @@ def marqueurs_negatifs2(xp: Experience) -> [list]:
 
 
 def rechercher_dico(table: list, n: int, elt: int):
-    bas, op, haut = 0,0, n - 1
+    bas, op, haut = 0, 0, n - 1
     while True:
         op += 1
         milieu = (bas + haut) // 2
@@ -232,4 +235,4 @@ def test(p: int, m: int):
     return res_list
 
 
-test(2,5)
+test(2, 5)
