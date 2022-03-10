@@ -231,5 +231,3 @@ def test(p: int, m: int):
     res_list = [m, p, cpt1, cpt2, cpt3]
     return res_list
 
-
-test(2,5)
