@@ -100,7 +100,6 @@ def merge_sort(arr: list, left_index: int, right_index: int) -> None:
 
         merge_sort(arr, left_index, m)
         merge_sort(arr, m + 1, right_index)
-
         merge(arr, left_index, m, right_index)
 
 
